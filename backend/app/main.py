@@ -1,18 +1,18 @@
 from fastapi import FastAPI
-from sqlalchemy import text
 
-from app.database.database import engine
+from app.database.database import Base, engine
+from app.database import base
 
-app = FastAPI()
+Base.metadata.create_all(bind=engine)
+
+app = FastAPI(
+    title="IntelliWealth API",
+    version="1.0.0"
+)
 
 
 @app.get("/")
 def home():
-    with engine.connect() as connection:
-        result = connection.execute(text("SELECT version();"))
-        version = result.scalar()
-
     return {
-        "message": "Database Connected Successfully!",
-        "postgres_version": version
+        "message": "IntelliWealth API is Running"
     }
